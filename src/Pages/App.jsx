@@ -52,7 +52,7 @@ function LoginPage() {
         <button className="button" type="submit">Login</button>
         
         <br />
-        <Link className="button" to="/signup">Créer un compte</Link>
+        <Link className="button" to="/signup">Créer un compte (En maintenance)</Link>
       </form>
     </div>
   );

@@ -1,29 +1,32 @@
 import React, { useState } from "react";
 import "../css/rdv.css";
 import initConnexion from '../firebase';
-import { getAuth } from "firebase/auth"
+import { getDatabase,ref,set } from "firebase/database"
+import { useNavigate } from 'react-router-dom'
 
 initConnexion();
-export default function AppointmentPage() {
+export default function RdvPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const auth = getAuth();
-
+  const db = getDatabase();
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // push({
-    //   firstName: firstName,
-    //   lastName: lastName,
-    //   email: email,
-    //   phone: phone,
-    //   date: date,
-    //   time: time
-    // });
+    const result = set(ref(db, 'rdv/' + date+'/'+time), {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      date: date,
+      time: time
+    });
+    if(result){
+      navigate('/rdvConfirm')
+    }
   };
 
   return (

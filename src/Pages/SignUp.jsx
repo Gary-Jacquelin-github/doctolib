@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import '../css/login.css'
 import { useNavigate } from 'react-router-dom'
 import initConnexion from '../firebase';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
 initConnexion();
 
-function LoginPage() {
+function SignUp() {
   
   const navigate = useNavigate();
   const auth = getAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmPassword] = useState('');
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -21,12 +20,21 @@ function LoginPage() {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-  };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => { 
+    const user = userCredential.user;
+    if(user){
+      navigate('/')
+    }
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
     
   };
 
@@ -42,10 +50,6 @@ function LoginPage() {
           Password:
           <input type="password" value={password} onChange={handlePasswordChange} />
         </label>
-        <label>
-          Confirm Password:
-          <input type="password" value={confirmpassword} onChange={handleConfirmPasswordChange} />
-        </label>
         <br />
         <button className="button" type="submit">Créer le compte</button>
       </form>
@@ -53,4 +57,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignUp;
