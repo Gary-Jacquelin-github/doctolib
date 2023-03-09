@@ -28,6 +28,8 @@ function LoginPage() {
     const user = userCredential.user;
     if(user){
       navigate('/rdv')
+    }else {
+      
     }
   })
   .catch((error) => {

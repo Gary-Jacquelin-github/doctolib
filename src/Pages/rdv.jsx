@@ -1,11 +1,11 @@
 import React, { useState,useEffect  } from "react";
 import "../css/rdv.css";
 import initConnexion from '../firebase';
-import { ref,set } from "firebase/database"
-import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom'
-import { getAuth } from "firebase/auth";
 import db from '../firebase';
+import 'react-datepicker/dist/react-datepicker.css';
+import { collection, getDocs , addDoc} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 initConnexion();
 export default function RdvPage() {
@@ -19,10 +19,12 @@ export default function RdvPage() {
   useEffect(() => {
     const fetchMedecins = async () => {
       const querySnapshot = await getDocs(collection(db, "medecins"));
-      const data = querySnapshot.docs.map(doc => doc.data());
+      const data = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        nomComplet: `${doc.data().nom} ${doc.data().prenom}`
+      }));
       setMedecins(data);
     };
-
     getAuth().onAuthStateChanged((user) => {
       if (user) {
         fetchMedecins();
@@ -33,20 +35,27 @@ export default function RdvPage() {
     setName(e.target.value);
   }
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const result = set(ref(db, 'rdv/' + date+'/'+time), {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      phone: phone,
-      date: date,
-      time: time
-    });
-    if(result){
-      navigate('/rdvConfirm')
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const user = getAuth().currentUser;
+    try {
+      const docRef = await addDoc(collection(db, "rdv"), {
+        patient: user.uid,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        date: date,
+        time: time
+      });
+      if(docRef){
+        navigate('/rdvConfirm')
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout en bdd: ", error);
     }
-  };
+    
+  }
 
   return (
     <div className="appointment-page">
@@ -108,8 +117,8 @@ export default function RdvPage() {
         </label>
         <label htmlFor="select-name">Nom:</label>
         <select id="select-name" className="form-select" onChange={handleNameChange}>
-          {medecins.map((medecin, index) => (
-            <option key={index} value={medecin.nom}>{medecin.nom}</option>
+          {medecins.map((medecin) => (
+            <option key={medecin.id} value={medecin.id}>{medecin.nomComplet}</option>
           ))}
         </select>
         <button type="submit">Confirmer le rendez-vous</button>

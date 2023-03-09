@@ -1,10 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 
 function initConnexion()
 {
     const firebaseConfig = {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        apiKey: "AIzaSyBdi3zeJ4_aIWZuGrDT07Wl-bdDG4dpMUQ",
         authDomain: "rdv-client-1b59f.firebaseapp.com",
         databaseURL: "https://rdv-client-1b59f-default-rtdb.firebaseio.com",
         projectId: "rdv-client-1b59f",
