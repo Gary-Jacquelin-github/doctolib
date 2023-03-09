@@ -5,14 +5,14 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   plugins: [react(), VitePWA({
     manifest: {
-      "theme_color": "#4835f6",
-      "background_color": "#ffffff",
+      "theme_color": "#f69435",
+      "background_color": "#f69435",
       "display": "browser",
       "scope": "/",
       "start_url": "/",
-      "name": "doctolib project",
-      "short_name": "doctolib",
-      "description": "projet doctolib",
+      "name": "Doctolib",
+      "short_name": "Doctolib",
+      "description": "Doctolib",
       "icons": [
           {
               "src": "/icon-192x192.png",
