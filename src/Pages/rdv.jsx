@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import "../css/rdv.css";
 import initConnexion from '../firebase';
-import { getDatabase,ref,set } from "firebase/database"
+import { ref,set } from "firebase/database"
+import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom'
+import { getAuth } from "firebase/auth";
+import db from '../firebase';
 
 initConnexion();
 export default function RdvPage() {
@@ -12,7 +15,23 @@ export default function RdvPage() {
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const db = getDatabase();
+  const [medecins, setMedecins] = useState([]);
+  useEffect(() => {
+    const fetchMedecins = async () => {
+      const querySnapshot = await getDocs(collection(db, "medecins"));
+      const data = querySnapshot.docs.map(doc => doc.data());
+      setMedecins(data);
+    };
+
+    getAuth().onAuthStateChanged((user) => {
+      if (user) {
+        fetchMedecins();
+      }
+    });
+  }, []);
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -87,6 +106,12 @@ export default function RdvPage() {
             required
           />
         </label>
+        <label htmlFor="select-name">Nom:</label>
+        <select id="select-name" className="form-select" onChange={handleNameChange}>
+          {medecins.map((medecin, index) => (
+            <option key={index} value={medecin.nom}>{medecin.nom}</option>
+          ))}
+        </select>
         <button type="submit">Confirmer le rendez-vous</button>
       </form>
     </div>
