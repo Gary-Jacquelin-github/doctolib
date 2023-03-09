@@ -3,7 +3,6 @@ import '../css/login.css'
 import { useNavigate,Link } from 'react-router-dom'
 import initConnexion from '../firebase';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { Button,Platform,Text,Vibration,View,SafeAreaView,StyleSheet} from 'react-native';
 
 initConnexion();
 
@@ -30,7 +29,7 @@ function LoginPage() {
     if(user){
       navigate('/rdv')
     }else {
-      Vibration.vibrate(200);
+      navigator.vibrate(1000);
     }
   })
   .catch((error) => {
