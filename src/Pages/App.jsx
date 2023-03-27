@@ -83,6 +83,8 @@ function LoginPage() {
       <button onClick={handleClick} className="button">
       Télécharger l'application
     </button>
+    <br />
+    <a className="button" href="mailto:minecraft0902@hotmail.fr?subject=Création de compte&body=Bonjour, Comme vous etes le meilleur je voudrais un compte svp.">Envoyer un e-mail</a>
     </div>
     </div>
   );
