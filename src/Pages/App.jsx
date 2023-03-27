@@ -27,7 +27,7 @@ function LoginPage() {
     .then((userCredential) => { 
     const user = userCredential.user;
     if(user){
-      navigate('/rdv')
+      navigate('/choix')
     }else {
       navigator.vibrate(1000);
     }
