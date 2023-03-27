@@ -29,7 +29,11 @@ function LoginPage() {
     if(user){
       navigate('/choix')
     }else {
-      navigator.vibrate(1000);
+      if ('vibrate' in navigator) {
+        navigator.vibrate([200, 100, 200]);
+      } else {
+        console.log('La vibration n\'est pas supportée par cet appareil.');
+      }
     }
   })
   .catch((error) => {
